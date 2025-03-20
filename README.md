@@ -5,4 +5,22 @@
 
 ## Setup
 
+    git clone
+    cd hardspheres-2d
+    uv sync
+
+For the installation of uv see [here](https://docs.astral.sh/uv/getting-started/installation/).
+
+Note: this project uses Rust 1.82. So you may need to [install the rust toolchain](https://www.rust-lang.org/tools/install).
+
 ## How to use
+
+The notebook `./melting-hard-sphere-hexagons.ipynb` contains all the steps to set up and run event driven molecular dynamcis on your machine.
+
+To visualize the dynamics you may want to install [ovito](https://www.ovito.org). The base version is sufficient.
+
+## Developing
+
+During your rust edits you want to update your build artefacts so you can use them from python / a notebook. For this please use
+
+    make update
