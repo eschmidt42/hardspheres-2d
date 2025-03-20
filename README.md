@@ -3,9 +3,13 @@
 
 ![Melting hexagon of hard spheres](./melting-hexagon.gif)
 
-## Setup
+## Quickstart
 
-    git clone
+    uvx --from hardspheres-2d hardspheres2d --help
+
+## Setup to develop
+
+    git clone https://github.com/eschmidt42/hardspheres-2d.git
     cd hardspheres-2d
     uv sync
 
@@ -17,7 +21,7 @@ Note: this project uses Rust 1.82. So you may need to [install the rust toolchai
 
 ### Command Line
 
-To run the event driven molecular dynamics simulation from your command line you can check out
+To run the event driven molecular dynamics simulation from your command line within the project check out
 
     uv run hardspheres2d --help
 
@@ -30,6 +34,6 @@ To visualize the dynamics you may want to install [ovito](https://www.ovito.org)
 
 ## Developing
 
-During your rust edits you want to update your build artefacts so you can use them from python / a notebook. For this please use
+During your rust edits you want to update your build artefacts so you can use them from python / a notebook. For you can use
 
     make update
