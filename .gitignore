@@ -13,3 +13,7 @@ wheels/
 # Rust artefacts
 target/
 *.so
+
+# other artefacts
+notes.md
+*.xyz
