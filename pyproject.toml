@@ -1,0 +1,22 @@
+[project]
+name = "hardspheres-2d"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "eschmidt42", email = "11818904+eschmidt42@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = []
+
+[project.scripts]
+hardspheres-2d = "hardspheres_2d:main"
+
+[tool.maturin]
+module-name = "hardspheres_2d._core"
+python-packages = ["hardspheres_2d"]
+python-source = "src"
+
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
