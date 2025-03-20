@@ -8,6 +8,7 @@ authors = [
 ]
 requires-python = ">=3.13"
 dependencies = [
+    "click>=8.1.8",
     "numpy>=2.2.4",
     "polars>=1.25.2",
     "scipy>=1.15.2",
@@ -16,7 +17,7 @@ dependencies = [
 ]
 
 [project.scripts]
-hardspheres-2d = "hardspheres_2d:main"
+hardspheres2d = "hardspheres_2d.cli:main"
 
 [tool.maturin]
 module-name = "hardspheres_2d._core"

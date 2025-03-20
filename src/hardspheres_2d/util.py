@@ -152,3 +152,12 @@ def count_consecutive_changes_in_acceleration(df: pl.DataFrame) -> pl.DataFrame:
     df = df.drop(["a_changed", "a_cumsum", "change_mark", "change_id", "a_cumsum_min"])
 
     return df
+
+
+def listify_array(x: np.ndarray) -> list[list[float]] | list[float]:
+    if x.ndim == 2:
+        return [list(v) for v in x]
+    elif x.ndim == 1:
+        return list(x)
+    else:
+        raise NotImplementedError(f"{x.ndim=} > 2, not implemented.")
