@@ -112,5 +112,3 @@ jobs:
 
       - name: Upload to TestPyPI
         run: uv publish --publish-url https://test.pypi.org/legacy/ --token ${{ secrets.TESTPYPI_TOKEN }}
-        # run: |
-        #   twine upload --repository testpypi dist/*
