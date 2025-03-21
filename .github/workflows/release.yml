@@ -100,7 +100,8 @@ jobs:
       - name: Download wheel artifacts
         uses: actions/download-artifact@v4
         with:
-          path: target/wheels/
+        #   path: target/wheels/
+          path: dist/
           pattern: cibw-wheels-python-*
 
       - name: Setup uv
