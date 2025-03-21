@@ -1,0 +1,116 @@
+# .github/workflows/release.yml
+name: Release Build and Upload
+
+on:
+  release:
+    types: [created]
+#   push:
+    # tags:
+    #   - 'v*'
+
+jobs:
+  build-sdist:
+    name: Build Source Distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "0.5.7"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Install project dependencies
+        run: |
+          uv sync --all-extras --dev
+
+      - name: Build sdist
+        run: |
+          uv build --sdist
+        working-directory: .
+
+      - name: Store artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cibw-sdist
+          path: dist/*.tar.gz
+
+
+  build-wheels:
+    needs: build-sdist
+    strategy: # https://github.com/scikit-learn/scikit-learn/blob/main/.github/workflows/wheels.yml
+      matrix:
+        include:
+            # linux
+            - os: ubuntu-latest
+              python: 313
+              platform_id: manylinux_x86_64
+            # macos
+            - os: macos-14
+              python: 313
+              platform_id: macosx_arm64
+        # platform: [linux, macos, windows]
+        # python-version: ["3.12", "3.13"]
+
+    name: Build Wheel for python=${{ matrix.python }} platform=${{ matrix.platform_id }} os=${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout hardspheres2d
+        uses: actions/checkout@v4
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "0.5.7"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+    #   - name: Install Python ${{ matrix.python }}
+    #     run: |
+    #       uv python install ${{ matrix.python }}
+
+      - name: Build wheel
+        run: |
+          uv build --python ${{ matrix.python }} --wheel
+        working-directory: .
+
+      - name: Store artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cibw-wheels-python-${{ matrix.python }}-os-${{ matrix.platform_id }}
+          path: target/wheels/*.whl
+
+  upload-to-testpypi:
+    name: Upload Wheels to TestPyPI
+    needs: [build-sdist, build-wheels]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout hardspheres2d
+        uses: actions/checkout@v4
+
+      - name: Download built artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/
+          name: cibw-sdist
+
+      - name: Download wheel artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: target/wheels/
+          pattern: cibw-wheels-python-*
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "0.5.7"
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+
+      - name: Upload to TestPyPI
+        run: uv publish --publish-url https://test.pypi.org/legacy/ --token ${{ secrets.TESTPYPI_TOKEN }}
+        # run: |
+        #   twine upload --repository testpypi dist/*
